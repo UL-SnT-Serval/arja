@@ -68,8 +68,8 @@ public class ArjaMain {
 		System.out.println("Attempted = " + ArjaProblem.attempted);
 		System.out.println("Success = " + ArjaProblem.success);
 		System.out.println("Failed (compilation) = " + ArjaProblem.compilationFailed);
-		System.out.println("Failed (tests) = " + ArjaProblem.testsuiteFailed);
 		System.out.println("Failed (test suites) = " + ArjaProblem.testsuiteFailed);
+		System.out.println("Failed (tests) = " + ArjaProblem.testcaseFailed);
 		System.out.println("Failed (timeout) = " + ArjaProblem.timeouts);
 	}
 }
