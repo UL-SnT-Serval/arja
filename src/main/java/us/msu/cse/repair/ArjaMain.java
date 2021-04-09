@@ -13,7 +13,7 @@ import us.msu.cse.repair.ec.operators.mutation.ExtendedMutationFactory;
 import us.msu.cse.repair.ec.problems.ArjaProblem;
 
 public class ArjaMain {
-	public static void main(String args[]) throws Exception {
+	public static void main(String[] args) throws Exception {
 		HashMap<String, String> parameterStrs = Interpreter.getParameterStrings(args);
 		HashMap<String, Object> parameters = Interpreter.getBasicParameterSetting(parameterStrs);
 
@@ -64,5 +64,12 @@ public class ArjaMain {
 		repairAlg.addOperator("selection", selection);
 		
 		repairAlg.execute();
+
+		System.out.println("Attempted = " + ArjaProblem.attempted);
+		System.out.println("Success = " + ArjaProblem.success);
+		System.out.println("Failed (compilation) = " + ArjaProblem.compilationFailed);
+		System.out.println("Failed (tests) = " + ArjaProblem.testsuiteFailed);
+		System.out.println("Failed (test suites) = " + ArjaProblem.testsuiteFailed);
+		System.out.println("Failed (timeout) = " + ArjaProblem.timeouts);
 	}
 }

@@ -30,6 +30,14 @@ import us.msu.cse.repair.ec.representation.ArrayIntAndBinarySolutionType;
 
 public class ArjaProblem extends AbstractRepairProblem {
 	private static final long serialVersionUID = 1L;
+
+	public static int attempted = 0;
+	public static int success = 0;
+	public static int compilationFailed = 0;
+	public static int testsuiteFailed = 0;
+	public static int testcaseFailed = 0;
+	public static int timeouts = 0;
+
 	Double weight;
 
 	Integer numberOfObjectives;
@@ -106,8 +114,9 @@ public class ArjaProblem extends AbstractRepairProblem {
 	@Override
 	public void evaluate(Solution solution) throws JMException {
 		// TODO Auto-generated method stub
-		System.out.println("One fitness evaluation starts...");
-		
+		//System.out.println("One fitness evaluation starts...");
+		++attempted;
+
 		int[] array = ((ArrayInt) solution.getDecisionVariables()[0]).array_;
 		BitSet bits = ((Binary) solution.getDecisionVariables()[1]).bits_;
 
@@ -181,7 +190,8 @@ public class ArjaProblem extends AbstractRepairProblem {
 			}
 		} else {
 			assignMaxObjectiveValues(solution);
-			System.out.println("Compilation fails!");
+			//System.out.println("Compilation fails!");
+			++compilationFailed;
 		}
 
 		if (status) {
@@ -189,7 +199,7 @@ public class ArjaProblem extends AbstractRepairProblem {
 		}
 
 		evaluations++;
-		System.out.println("One fitness evaluation is finished...");
+		//System.out.println("One fitness evaluation is finished...");
 	}
 
 	void save(Solution solution, Map<String, String> modifiedJavaSources, Map<String, JavaFileObject> compiledClasses,
@@ -257,11 +267,16 @@ public class ArjaProblem extends AbstractRepairProblem {
 			double ratioOfFailuresInNegative = testExecutor.getRatioOfFailuresInNegative();
 			double fitness = weight * testExecutor.getRatioOfFailuresInPositive()
 					+ testExecutor.getRatioOfFailuresInNegative();
-			
-			System.out.println("Number of failed tests: "
-					+ (testExecutor.getFailureCountInNegative() + testExecutor.getFailureCountInPositive()));
-			System.out.println("Weighted failure rate: " + fitness);
-			
+
+			int testsFailed = testExecutor.getFailureCountInNegative() + testExecutor.getFailureCountInPositive();
+
+			//System.out.println("Number of failed tests: " + testsFailed);
+			//System.out.println("Weighted failure rate: " + fitness);
+
+			success += testsFailed == 0 ? 1 : 0;
+			testsuiteFailed += testsFailed != 0 ? 1 : 0;
+			testcaseFailed += testsFailed;
+
 			if (numberOfObjectives == 1 || numberOfObjectives == 2) 
 				solution.setObjective(numberOfObjectives - 1, fitness);
 			else {
@@ -270,7 +285,8 @@ public class ArjaProblem extends AbstractRepairProblem {
 			}
 		} else {
 			assignMaxObjectiveValues(solution);
-			System.out.println("Timeout occurs!");
+			//System.out.println("Timeout occurs!");
+			++timeouts;
 		}
 		return status;
 	}

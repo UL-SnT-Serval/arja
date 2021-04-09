@@ -1,7 +1,9 @@
 FUN_NSGAII
 patches_*
+bin/
 # Created by https://www.gitignore.io/api/maven
 # Edit at https://www.gitignore.io/?templates=maven
+
 
 ### Maven ###
 target/
@@ -14,5 +16,10 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
+
+### IDE ###
+.vscode/
+.idea/
+*.iml
 
 # End of https://www.gitignore.io/api/maven
