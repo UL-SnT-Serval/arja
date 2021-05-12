@@ -11,14 +11,7 @@ import java.lang.reflect.Modifier;
 //import java.lang.reflect.Parameter;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jdt.core.dom.ASTMatcher;
@@ -609,4 +602,34 @@ public class Helper {
     	}
     	return id;
     }
+
+	public static void setEnvironmentVariables(Map<String, String> newVariables) throws Exception {
+    	try {
+			Class<?> processEnvironmentClass = Class.forName("java.lang.ProcessEnvironment");
+			Field theEnvironmentField = processEnvironmentClass.getDeclaredField("theEnvironment");
+			theEnvironmentField.setAccessible(true);
+
+			Map<String, String> env = (Map<String, String>) theEnvironmentField.get(null);
+			env.putAll(newVariables);
+
+			Field theCaseInsensitiveEnvironmentField = processEnvironmentClass.getDeclaredField("theCaseInsensitiveEnvironment");
+			theCaseInsensitiveEnvironmentField.setAccessible(true);
+
+			Map<String, String> cienv = (Map<String, String>)     theCaseInsensitiveEnvironmentField.get(null);
+			cienv.putAll(newVariables);
+		} catch (NoSuchFieldException e) {
+			Class[] classes = Collections.class.getDeclaredClasses();
+			Map<String, String> env = System.getenv();
+			for(Class cl : classes) {
+				if("java.util.Collections$UnmodifiableMap".equals(cl.getName())) {
+					Field field = cl.getDeclaredField("m");
+					field.setAccessible(true);
+					Object obj = field.get(env);
+					Map<String, String> map = (Map<String, String>) obj;
+					map.clear();
+					map.putAll(newVariables);
+				}
+			}
+		}
+	}
 }

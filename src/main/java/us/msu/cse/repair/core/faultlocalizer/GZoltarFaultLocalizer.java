@@ -4,17 +4,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import java.util.HashMap;
-import java.util.HashSet;
-
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import com.gzoltar.core.GZoltar;
 import com.gzoltar.core.components.Statement;
 import com.gzoltar.core.instr.testing.TestResult;
 
 import us.msu.cse.repair.core.parser.LCNode;
+import us.msu.cse.repair.core.util.Helper;
 
 public class GZoltarFaultLocalizer implements IFaultLocalizer {
 	Set<String> positiveTestMethods;
@@ -23,7 +20,7 @@ public class GZoltarFaultLocalizer implements IFaultLocalizer {
 	Map<LCNode, Double> faultyLines;
 
 	public GZoltarFaultLocalizer(Set<String> binJavaClasses, Set<String> binExecuteTestClasses, String binJavaDir,
-			String binTestDir, Set<String> dependences) throws FileNotFoundException, IOException {
+			String binTestDir, Set<String> dependences) throws Exception {
 		String projLoc = new File("").getAbsolutePath();
 		GZoltar gz = new GZoltar(projLoc);
 
@@ -39,7 +36,9 @@ public class GZoltarFaultLocalizer implements IFaultLocalizer {
 		for (String javaClass : binJavaClasses)
 			gz.addClassToInstrument(javaClass);
 
+		Helper.setEnvironmentVariables(Collections.singletonMap("FAULT_LOCALIZATION", "true"));
 		gz.run();
+		Helper.setEnvironmentVariables(Collections.singletonMap("FAULT_LOCALIZATION", "false"));
 
 		positiveTestMethods = new HashSet<String>();
 		negativeTestMethods = new HashSet<String>();

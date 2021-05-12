@@ -295,7 +295,7 @@ public abstract class AbstractRepairProblem extends Problem {
 			FileUtils.writeLines(new File(testClassesInfoPath), binExecuteTestClasses);
 	}
 
-	void invokeFaultLocalizer() throws FileNotFoundException, IOException {
+	void invokeFaultLocalizer() throws Exception {
 		System.out.println("Fault localization starts...");
 		IFaultLocalizer faultLocalizer;
 		if (gzoltarDataDir == null)
