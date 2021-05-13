@@ -298,11 +298,7 @@ public abstract class AbstractRepairProblem extends Problem {
 	void invokeFaultLocalizer() throws Exception {
 		System.out.println("Fault localization starts...");
 		IFaultLocalizer faultLocalizer;
-		if (gzoltarDataDir == null)
-			faultLocalizer = new GZoltarFaultLocalizer(binJavaClasses, binExecuteTestClasses, binJavaDir, binTestDir,
-					dependences);
-		else
-			faultLocalizer = new GZoltarFaultLocalizer2(gzoltarDataDir);
+			faultLocalizer = new GZoltarFaultLocalizer(binJavaClasses, binExecuteTestClasses, binJavaDir, binTestDir, dependences);;
 
 		faultyLines = faultLocalizer.searchSuspicious(thr);
 
